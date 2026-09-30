@@ -1,0 +1,16 @@
+# Системные файлы macOS
+.DS_Store
+
+# Папки Python и кэш IDE
+__pycache__/
+.idea/
+.vscode/
+
+# Файлы отчетов о тестировании (coverage)
+.coverage
+htmlcov/
+
+# Текстовые файлы (базы данных словаря), чтобы не засорять историю
+my_dictionary.txt
+dictionary_backup.txt
+test_data.txt

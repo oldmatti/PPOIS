@@ -1,5 +1,5 @@
 # python -m unittest test_dictionary.py
-# Чтобы доказать преподавателю, что у вас высокое покрытие (или настроить это в CI/CD на GitHub, как просят в ТЗ), используется стандартная утилита coverage
+# Чтобы доказать преподавателю, что у вас высокое покрытие, используется стандартная утилита coverage
 # Запуск тестов с покрытием: python3 -m coverage run -m unittest test_dictionary.py
 # Вывод отчета: python3 -m coverage report -m
 import unittest
@@ -40,7 +40,8 @@ class TestDictionary(unittest.TestCase):
         self.assertEqual(self.dict["apple"], "яблочко")
 
     def test_add_invalid_format(self):
-        """Защита от дурака: добавление неверного формата должно вызывать ValueError."""
+        """Защита от дурака:
+        добавление неверного формата должно вызывать ValueError."""
         with self.assertRaises(ValueError):
             self.dict += "просто строка"
 
@@ -110,7 +111,8 @@ class TestDictionary(unittest.TestCase):
         self.assertTrue(os.path.exists(self.BACKUP_FILE))
 
     def test_remove_complex_cases(self):
-        """Проверка сложных случаев удаления: узел-лист и узел с двумя потомками."""
+        """Проверка сложных случаев удаления:
+        узел-лист и узел с двумя потомками."""
         # Строим ветвистое дерево
         self.dict += ("m", "м")  # корень
         self.dict += ("b", "б")  # левый потомок
@@ -174,7 +176,8 @@ class TestDictionary(unittest.TestCase):
         self.assertEqual(self.dict["new_word"], "новое_слово")
 
     def test_load_with_empty_lines(self):
-        """Покрытие красной строки 207: пропуск пустых строк при чтении файла."""
+        """Покрытие красной строки 207:
+        пропуск пустых строк при чтении файла."""
         with open(self.TEST_FILE, 'w', encoding='utf-8') as f:
             f.write("\napple-яблоко\n   \n\n")
         self.dict.load_from_file(self.TEST_FILE)
@@ -186,7 +189,7 @@ class TestDictionary(unittest.TestCase):
         self.dict += ("a", "а")
         self.dict += ("b", "б")  # Ветка вправо
 
-        dict2 += ("a", "а")  # У dict2 нет правого потомка, структура не совпадает
+        dict2 += ("a", "а")
         self.assertFalse(self.dict == dict2)
 
     def test_getitem_missing_explicit(self):

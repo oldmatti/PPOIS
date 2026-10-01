@@ -1,4 +1,4 @@
-#добавление нового английского слова и перевода для него (+=); в C++ предусмотреть перегрузку как для C-строк (char*), так и для std::string;
+# добавление нового английского слова и перевода для него (+=); в C++ предусмотреть перегрузку как для C-строк (char*), так и для std::string;
 # удаление существующего английского слова из словаря (-=);
 # поиск перевода английского слова ([]);
 # замену перевода английского слова ([]);
@@ -6,7 +6,6 @@
 # загрузку словаря из файла.
 
 class Dictionary:
-
     class _Node:
         def __init__(self, english, russian):
             self.english = english
@@ -38,13 +37,11 @@ class Dictionary:
         # чтобы старые связи в дереве не оборвались
         return node
 
-    def __iadd__(self, pair):#добавление нового английского слова и перевода для него (+=)
+    def __iadd__(self, pair):  # добавление нового английского слова и перевода для него (+=)
         """Добавление нового слова и перевода (оператор +=)."""
         english, russian = pair
         self.__root = self._insert(self.__root, english, russian)
         return self
-
-
 
     def _find_min(self, node):
         """Вспомогательный метод для поиска узла с минимальным ключом."""
@@ -86,12 +83,11 @@ class Dictionary:
 
         return node
 
-    def __isub__(self, english_word): # удаление существующего английского слова из словаря (-=);
+    def __isub__(self, english_word):  # удаление существующего английского слова из словаря (-=);
         """Удаление слова и перевода (оператор -=).
         Если слова в словаре нет, то операция игнорируется"""
         self.__root = self._remove(self.__root, english_word)
         return self
-
 
     def __getitem__(self, english_word):
         """Поиск перевода по английскому слову (оператор [])."""
@@ -108,18 +104,13 @@ class Dictionary:
         # Если цикл закончился, а мы так ничего и не вернули, значит слова нет
         raise KeyError(f"Слово '{english_word}' не найдено.")
 
-
     def __setitem__(self, english_word, new_russian):
         """Замена или добавление перевода через оператор []."""
         self.__root = self._insert(self.__root, english_word, new_russian)
 
-
-
     def __len__(self):
         """Возвращает количество слов в словаре."""
         return self.__count
-
-
 
     def _pre_order_save(self, node, file):
         """Скрытый рекурсивный метод для записи узлов (Корень -> Лево -> Право)."""
@@ -142,7 +133,6 @@ class Dictionary:
         with open(filename, 'w', encoding='utf-8') as file:
             # Запускаем рекурсивный обход, начиная с корня
             self._pre_order_save(self.__root, file)
-
 
     def load_from_file(self, filename):
         """
@@ -170,8 +160,6 @@ class Dictionary:
                     self += (english, russian)
                 else:
                     raise ValueError(f"Некорректный формат строки в файле: {clean_line}")
-
-
 
     def _compare_trees(self, node1, node2):
         """Скрытый метод для рекурсивного сравнения двух узлов и их потомков."""
@@ -201,7 +189,7 @@ class Dictionary:
 
         # 2. Оптимизация (быстрый отказ):
         # Если количество слов разное, деревья точно не равны.
-        if len(self) != len(other): #переопределенный метод
+        if len(self) != len(other):  # переопределенный метод
             return False
 
         # 3. Если размеры равны, запускаем поузловое сравнение корней

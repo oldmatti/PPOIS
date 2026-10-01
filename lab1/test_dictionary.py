@@ -1,7 +1,7 @@
-#python -m unittest test_dictionary.py
-#Чтобы доказать преподавателю, что у вас высокое покрытие (или настроить это в CI/CD на GitHub, как просят в ТЗ), используется стандартная утилита coverage
-#Запуск тестов с покрытием: python3 -m coverage run -m unittest test_dictionary.py
-#Вывод отчета: python3 -m coverage report -m
+# python -m unittest test_dictionary.py
+# Чтобы доказать преподавателю, что у вас высокое покрытие (или настроить это в CI/CD на GitHub, как просят в ТЗ), используется стандартная утилита coverage
+# Запуск тестов с покрытием: python3 -m coverage run -m unittest test_dictionary.py
+# Вывод отчета: python3 -m coverage report -m
 import unittest
 import os
 from dictionary import Dictionary
@@ -145,7 +145,7 @@ class TestDictionary(unittest.TestCase):
 
     def test_load_empty_file(self):
         """Проверка загрузки из абсолютно пустого файла."""
-        with open(self.TEST_FILE, 'w', encoding='utf-8') as f:
+        with open(self.TEST_FILE, 'w', encoding='utf-8'):
             pass  # Создаем пустой файл
 
         self.dict.load_from_file(self.TEST_FILE)

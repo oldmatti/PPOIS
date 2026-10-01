@@ -1,4 +1,4 @@
-from dictionary import Dictionary
+from lab1.dictionary.dictionary import Dictionary
 
 
 def print_menu():

@@ -6,7 +6,7 @@ Laboratory works for the PPOIS course.
 
 | Lab | Language | Contents | Docs |
 | :--- | :--- | :--- | :--- |
-| 1 | Python | [Dictionary](lab1/dictionary.py), [Set](lab1/set.py) | [dictionary](docs/dictionary.html), [set](docs/set.html) |
+| 1 | Python | [Dictionary](lab1/dictionary/dictionary.py), [Set](lab1/set/set.py) | [dictionary](docs/dictionary.html), [set](docs/set.html) |
 
 ## Requirements
 

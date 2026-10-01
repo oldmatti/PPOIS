@@ -1,6 +1,5 @@
 name: PPOIS CI/CD Pipeline
 
-# Пайплайн будет запускаться при каждом пуше в ветку main и в любые ветки feature/
 on:
   push:
     branches: [ "main", "feature/*" ]
@@ -11,7 +10,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    # Указываем, что все команды запускаются внутри папки первой лабы
     defaults:
       run:
         working-directory: ./lab1
@@ -32,19 +30,18 @@ jobs:
 
     - name: 4. Проверка качества кода (Linter)
       run: |
-        # Проверяем код на ошибки и ограничиваем длину строки 150 символами (по ТЗ)
         flake8 . --count --max-line-length=150 --show-source --statistics
 
     - name: 5. Запуск unit-тестов и проверка покрытия
       run: |
-        coverage run -m unittest test_dictionary.py
-        # Выводим отчет в консоль GitHub Actions
+        # Указываем новый путь к тестам словаря
+        coverage run -m unittest dictionary/test_dictionary.py
         coverage report -m
 
     - name: 6. Сборка независимого исполняемого файла
       run: |
-        # PyInstaller запакует код в один независимый файл (Артефакт сборки)
-        pyinstaller --onefile main.py
+        # Указываем новый путь к main.py словаря
+        pyinstaller --onefile dictionary/main.py
 
     - name: 7. Сохранение артефакта сборки
       uses: actions/upload-artifact@v4

@@ -4,7 +4,7 @@
 # Вывод отчета: python3 -m coverage report -m
 import unittest
 import os
-from dictionary import Dictionary
+from lab1.dictionary.dictionary import Dictionary
 
 
 class TestDictionary(unittest.TestCase):

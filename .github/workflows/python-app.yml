@@ -34,14 +34,18 @@ jobs:
 
     - name: 5. Запуск unit-тестов и проверка покрытия
       run: |
-        # Указываем новый путь к тестам словаря
-        coverage run -m unittest dictionary/test_dictionary.py
-        coverage report -m
+          # Тесты для словаря
+          coverage run -a -m unittest dictionary/test_dictionary.py
+          # Тесты для множества
+          coverage run -a -m unittest set/test_set.py
+          coverage report -m
 
-    - name: 6. Сборка независимого исполняемого файла
+    - name: 6. Сборка независимых исполняемых файлов
       run: |
-        # Указываем новый путь к main.py словаря
-        pyinstaller --onefile dictionary/main.py
+           # Собираем словарь
+           pyinstaller --onefile dictionary/main.py --name dictionary-app-linux
+           # Собираем множество
+            pyinstaller --onefile set/main.py --name set-app-linux
 
     - name: 7. Сохранение артефакта сборки
       uses: actions/upload-artifact@v4

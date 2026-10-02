@@ -49,6 +49,68 @@ class CustomSet:
         """Технический вывод (для отладки совпадает с обычным)."""
         return self.__str__()
 
+    def remove(self, item):
+        """Удаление элемента."""
+        if item in self.elements:
+            self.elements.remove(item)
+        else:
+            raise KeyError(f"Элемента {item} нет в множестве.")
+
+    def __getitem__(self, item):
+        """Проверка принадлежности элемента множеству через оператор []."""
+        return item in self.elements
+
+    def __add__(self, other):
+        """Объединение двух множеств (+)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Объединять можно только с другим множеством.")
+        result = CustomSet(self.elements)
+        for item in other.elements:
+            result.add(item)
+        return result
+
+    def __iadd__(self, other):
+        """Объединение множеств с присваиванием (+=)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Объединять можно только с другим множеством.")
+        for item in other.elements:
+            self.add(item)
+        return self
+
+    def __mul__(self, other):
+        """Пересечение двух множеств (*)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Пересекать можно только с другим множеством.")
+        result = CustomSet()
+        for item in self.elements:
+            if item in other.elements:
+                result.add(item)
+        return result
+
+    def __imul__(self, other):
+        """Пересечение множеств с присваиванием (*=)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Пересекать можно только с другим множеством.")
+        self.elements = [item for item in self.elements if item in other.elements]
+        return self
+
+    def __sub__(self, other):
+        """Разность двух множеств (-)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Вычитать можно только другое множество.")
+        result = CustomSet()
+        for item in self.elements:
+            if item not in other.elements:
+                result.add(item)
+        return result
+
+    def __isub__(self, other):
+        """Разность множеств с присваиванием (-=)."""
+        if not isinstance(other, CustomSet):
+            raise TypeError("Вычитать можно только другое множество.")
+        self.elements = [item for item in self.elements if item not in other.elements]
+        return self
+
     def powerset(self):
         """
         Построение булеана (множества всех подмножеств) данного множества.

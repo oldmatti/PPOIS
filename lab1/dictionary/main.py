@@ -1,4 +1,4 @@
-from dictionary.dictionary import Dictionary
+from dictionary import Dictionary
 
 
 def print_menu():

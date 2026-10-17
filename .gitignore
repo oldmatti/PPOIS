@@ -14,3 +14,6 @@ htmlcov/
 my_dictionary.txt
 dictionary_backup.txt
 test_data.txt
+build/
+dist/
+*.spec

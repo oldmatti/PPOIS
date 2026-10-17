@@ -1,6 +1,6 @@
 import unittest
 import os
-from dictionary.dictionary import Dictionary
+from dictionary import Dictionary
 
 
 class TestDictionary(unittest.TestCase):

@@ -198,5 +198,4 @@ class Dictionary:
 
         self.save_to_file("dictionary_backup.txt")
 
-
         return False

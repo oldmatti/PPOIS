@@ -1,5 +1,5 @@
 import unittest
-from set.set import CustomSet
+from set import CustomSet
 
 
 class TestCustomSet(unittest.TestCase):

@@ -10,8 +10,6 @@ class CustomSet:
 
     def add(self, item):
         """Добавление элемента. Дубликаты игнорируются."""
-        # Благодаря переопределенному __eq__, оператор 'in' сам поймет,
-        # как сравнивать даже вложенные множества
         if item not in self.elements:
             self.elements.append(item)
 
@@ -33,7 +31,6 @@ class CustomSet:
         if len(self) != len(other):
             return False
 
-        # Проверяем, что каждый наш элемент есть в другом множестве
         for item in self.elements:
             if item not in other.elements:
                 return False
@@ -129,7 +126,7 @@ class CustomSet:
                 new_subsets.append(sub + [elem])
             subsets.extend(new_subsets)
 
-        # Теперь превращаем каждый список обратно в CustomSet и кладем в результат
+        # Превращаем каждый список обратно в CustomSet и кладем в результат
         for sub_list in subsets:
             result.add(CustomSet(sub_list))
 
@@ -141,7 +138,6 @@ class CustomSet:
         Формирование множества из строки.
         Пример: CustomSet.from_string("{a, b, {c}, {}}")
         """
-        # Убираем все пробелы для удобства парсинга
         s = s.replace(" ", "")
         if not s or s[0] != '{' or s[-1] != '}':
             raise ValueError("Строка должна начинаться с '{' и заканчиваться '}'.")
@@ -150,20 +146,16 @@ class CustomSet:
         current_word = ""
         root = None
 
-        # Идем по каждому символу строки
         for char in s:
             if char == '{':
-                # Начинается новое (возможно, вложенное) множество
                 new_set = CustomSet()
                 if stack:
-                    # Кладем его внутрь родительского множества
                     stack[-1].add(new_set)
                 else:
                     root = new_set
                 stack.append(new_set)
 
             elif char == '}':
-                # Множество закрывается
                 if current_word:
                     stack[-1].add(current_word)
                     current_word = ""
@@ -173,12 +165,10 @@ class CustomSet:
                 stack.pop()
 
             elif char == ',':
-                # Элемент закончился
                 if current_word:
                     stack[-1].add(current_word)
                     current_word = ""
             else:
-                # Накапливаем буквы элемента (например, 'a', 'b', 'c')
                 current_word += char
 
         if stack:

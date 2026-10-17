@@ -1,7 +1,3 @@
-# python -m unittest test_dictionary.py
-# Чтобы доказать преподавателю, что у вас высокое покрытие, используется стандартная утилита coverage
-# Запуск тестов с покрытием: python3 -m coverage run -m unittest test_dictionary.py
-# Вывод отчета: python3 -m coverage report -m
 import unittest
 import os
 from dictionary.dictionary import Dictionary

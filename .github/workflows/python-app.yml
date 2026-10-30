@@ -8,43 +8,85 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     defaults:
       run:
         working-directory: ./lab1
 
     steps:
-    - name: 1. Скачивание кода репозитория
-      uses: actions/checkout@v4
+      - name: 1. Скачивание кода репозитория
+        uses: actions/checkout@v4
 
-    - name: 2. Настройка окружения Python 3.9
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.9"
+      - name: 2. Настройка окружения Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
 
-    - name: 3. Установка необходимых библиотек
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pyinstaller pytest pytest-cov
+      - name: 3. Установка необходимых библиотек
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pyinstaller pytest pytest-cov
 
-    - name: 4. Проверка качества кода (Linter)
-      run: |
-        flake8 . --count --max-line-length=150 --show-source --statistics
+      - name: 4. Проверка качества кода (Linter)
+        run: |
+          flake8 . --count --max-line-length=150 --show-source --statistics
 
-    - name: 5. Запуск unit-тестов и проверка покрытия
-      run: |
+      - name: 5. Запуск unit-тестов и проверка покрытия
+        run: |
           python -m pytest . --cov=. --cov-report=term-missing --cov-fail-under=90
 
-    - name: 6. Сборка независимых исполняемых файлов
-      run: |
-           # Собираем словарь
-           pyinstaller --onefile dictionary/main.py --name dictionary-app-linux
-           # Собираем множество
-            pyinstaller --onefile set/main.py --name set-app-linux
+      - name: 6. Сборка независимых исполняемых файлов
+        run: |
+          # Собираем словарь
+          pyinstaller --onefile dictionary/main.py --name dictionary-app-mac
+          # Собираем множество
+          pyinstaller --onefile set/main.py --name set-app-mac
 
-    - name: 7. Сохранение артефакта сборки
-      uses: actions/upload-artifact@v4
-      with:
-        name: dictionary-app-linux
-        path: lab1/dist/main
+      - name: 7. Сохранение артефакта сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab1-apps-mac
+          path: |
+            lab1/dist/dictionary-app-mac
+            lab1/dist/set-app-mac
+
+  build-and-test-lab2:
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: ./lab2
+
+    steps:
+      - name: 1. Скачивание кода репозитория
+        uses: actions/checkout@v4
+
+      - name: 2. Настройка окружения Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: 3. Установка необходимых библиотек
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pyinstaller coverage
+
+      - name: 4. Проверка качества кода (Linter)
+        run: |
+          flake8 . --count --max-line-length=150 --extend-ignore=F401,W292,E302,E741 --show-source --statistics
+
+      - name: 5. Запуск unit-тестов и проверка покрытия
+        run: |
+          python -m coverage run -m unittest tests.py
+          python -m coverage report -m --fail-under=90
+
+      - name: 6. Сборка независимого исполняемого файла
+        run: |
+          pyinstaller --onefile main.py --name deanery-app-mac
+
+      - name: 7. Сохранение артефакта сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: deanery-app-mac
+          path: lab2/dist/deanery-app-mac

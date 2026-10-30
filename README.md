@@ -5,8 +5,9 @@ Laboratory works for the PPOIS course.
 ## Structure
 
 | Lab | Language | Contents | Docs |
-| :--- | :--- | :--- | :--- |
-| 1 | Python | [Dictionary](lab1/dictionary/dictionary.py), [Set](lab1/set/set.py) | [dictionary](docs/dictionary.html), [set](docs/set.html) |
+| --- | --- | --- | --- |
+| 1 | Python | Dictionary, Set | dictionary, set |
+| 2 | Python | OOP Domain Model (Deanery) | [lab2/README.md](lab2/README.md) |
 
 ## Requirements
 
@@ -15,7 +16,7 @@ Laboratory works for the PPOIS course.
 
 ## Documentation
 
-Generated with [pdoc](https://pdoc.dev).
+Generated with pdoc.
 
 ## Releases
 

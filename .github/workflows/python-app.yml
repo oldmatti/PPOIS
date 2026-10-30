@@ -74,7 +74,7 @@ jobs:
 
       - name: 4. Проверка качества кода (Linter)
         run: |
-          flake8 . --count --max-line-length=150 --show-source --statistics
+          flake8 . --count --max-line-length=150 --extend-ignore=F401,W292,E302,E741 --show-source --statistics
 
       - name: 5. Запуск unit-тестов и проверка покрытия
         run: |

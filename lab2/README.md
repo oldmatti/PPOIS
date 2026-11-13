@@ -56,21 +56,22 @@
 | Scholarship | 4 | 3 | Student, ScholarshipOrder |
 
 ## Исключения (12)
-* `DeaneryException`
-* `StudentNotFoundException`
-* `InvalidGradeException`
-* `ScheduleConflictException`
-* `InsufficientCreditsException`
-* `InvalidGroupTransferException`
-* `DormitoryFullException`
-* `ScholarshipDeniedException`
-* `ExpulsionRulesViolationException`
-* `InvalidDocumentFormatException`
-* `UnauthorizedAccessException`
-* `RetakeLimitExceededException`
+- `DeaneryException`
+- `StudentNotFoundException`
+- `InvalidGradeException`
+- `ScheduleConflictException`
+- `InsufficientCreditsException`
+- `InvalidGroupTransferException`
+- `DormitoryFullException`
+- `ScholarshipDeniedException`
+- `ExpulsionRulesViolationException`
+- `InvalidDocumentFormatException`
+- `UnauthorizedAccessException`
+- `RetakeLimitExceededException`
 
 ## Итоговая статистика
-* Поля: 175
-* Поведения: 146
-* Ассоциации: 77
-* Исключения: 12
+- **Поля:** 175
+- **Поведения (методы):** 146
+- **Ассоциации:** 77
+- **Исключения:** 12
+- **Покрытие тестами:** 93%

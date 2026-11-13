@@ -19,8 +19,6 @@ def setup_test_data():
         2, "Петр", "Петров", date(1980, 10, 15),
         "Доцент", 1800.0, "К.Т.Н."
     )
-
-    cs_dept = Department("Кафедра информатики", "401a", prof)
     group = StudyGroup("123456")
 
     student1 = Student(101, "Алексей", "Смирнов", date(2004, 3, 12))

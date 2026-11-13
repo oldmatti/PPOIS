@@ -17,7 +17,6 @@ class Schedule:
             # проверка, пытаются ли занять ту же самую аудиторию
             if existing_lesson.classroom.room_number == new_lesson.classroom.room_number:
 
-
                 if (existing_lesson.start_time < new_lesson.end_time and
                         new_lesson.start_time < existing_lesson.end_time):
                     raise ValueError(f"Conflict! Room {new_lesson.classroom.room_number} is already booked.")

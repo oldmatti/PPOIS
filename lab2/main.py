@@ -1,6 +1,6 @@
 from datetime import date, datetime, timedelta
 from models import (
-    Faculty, Department, Dean, Professor, Student, StudyGroup,
+    Faculty, Dean, Professor, Student, StudyGroup,
     Subject, Schedule, Lesson, GradeBook, Grade, Classroom
 )
 from exceptions import DeaneryException
@@ -8,140 +8,164 @@ from exceptions import DeaneryException
 
 def setup_test_data():
     faculty = Faculty("ФКС", "Корпус 4")
-
-    # Исправленный конструктор Dean (добавлены position и faculty)
     dean = Dean(
         1, "Иван", "Иванов", date(1975, 5, 20),
         2500.0, "Декан", faculty
     )
+    faculty.dean = dean
 
     prof = Professor(
         2, "Петр", "Петров", date(1980, 10, 15),
         "Доцент", 1800.0, "К.Т.Н."
     )
+
     group = StudyGroup("123456")
-
-    student1 = Student(101, "Алексей", "Смирнов", date(2004, 3, 12))
-    student2 = Student(102, "Мария", "Кузнецова", date(2005, 7, 21))
-
-    if hasattr(group, 'enroll_student'):
-        group.enroll_student(student1)
-        group.enroll_student(student2)
-
-    gb1 = GradeBook("GB-001", student1)
-    gb2 = GradeBook("GB-002", student2)
-    student1.grade_book = gb1
-    student2.grade_book = gb2
-
     subject = Subject("Основы алгоритмов", 120, True)
     schedule = Schedule()
 
-    return dean, group, prof, subject, schedule
+    return faculty, dean, group, prof, subject, schedule
 
 
 def main():
-    dean, group, prof, subject, schedule = setup_test_data()
+    data = setup_test_data()
+    faculty, dean, group, prof, subject, schedule = data
     classroom = Classroom("Ауд. 412", 30, True)
+
+    # Инициализация списков для надежной работы меню
+    if not hasattr(group, 'students'):
+        group.students = []
+    if not hasattr(faculty, 'employees'):
+        faculty.employees = [prof]
 
     while True:
         print("\n=== Система управления Деканатом ===")
-        print("1. Показать список студентов группы")
+        print("1. Показать список студентов")
         print("2. Добавить занятие в расписание")
         print("3. Выставить оценку студенту")
-        print("4. Инициировать отчисление (Приказ декана)")
+        print("4. Отчислить студента (Приказ)")
+        print("5. Зачислить студента")
+        print("6. Нанять преподавателя")
+        print("7. Назначить нового декана")
+        print("8. Добавить новый учебный предмет")
         print("0. Выход")
 
         choice = input("Выберите действие: ")
 
         try:
             if choice == "1":
-                g_name = getattr(
-                    group, 'group_number',
-                    getattr(group, 'group_name', '123456')
-                )
+                g_name = getattr(group, 'group_name', '123456')
                 print(f"\nГруппа {g_name}:")
-
-                students_list = getattr(group, 'students', [])
-                if not students_list:
-                    print("- Список студентов пуст")
-
-                for s in students_list:
-                    status = getattr(s, 'status', 'Активен')
-                    print(f"- {s.get_full_name()} [{status}]")
+                if not group.students:
+                    print("- Список пуст")
+                for s in group.students:
+                    st = getattr(s, 'status', 'Активен')
+                    print(f"- {s.get_full_name()} [{st}]")
 
             elif choice == "2":
                 day = input("Введите день недели: ")
-                slot = input("Введите номер пары (1-5): ")
-
+                slot = input("Номер пары (1-5): ")
                 now = datetime.now()
-                end_time = now + timedelta(hours=1.5)
+                end = now + timedelta(hours=1.5)
 
                 lesson = Lesson(
-                    f"L-{day}-{slot}", now, end_time,
+                    f"L-{day}-{slot}", now, end,
                     subject, prof, group, classroom
                 )
-
                 if hasattr(schedule, 'add_lesson'):
                     schedule.add_lesson(lesson)
-                print("Занятие успешно добавлено в расписание!")
+                title = getattr(subject, 'title', 'Предмет')
+                print(f"Занятие по '{title}' добавлено в расписание!")
 
             elif choice == "3":
-                student_id = int(input("Введите ID студента: "))
-                students_list = getattr(group, 'students', [])
-
-                target_student = next(
-                    (s for s in students_list
-                     if getattr(s, 'person_id', 0) == student_id),
+                s_id = int(input("ID студента: "))
+                target = next(
+                    (s for s in group.students
+                     if getattr(s, 'person_id', 0) == s_id),
                     None
                 )
-
-                # Заглушки, если студенты не привязались к группе
-                if not target_student and student_id == 101:
-                    target_student = student1  # noqa
-                elif not target_student and student_id == 102:
-                    target_student = student2  # noqa
-
-                if not target_student:
+                if not target:
                     print("Студент не найден.")
                     continue
 
-                msg = f"Оценка для {target_student.get_full_name()}: "
-                mark = int(input(msg))
+                mark = int(input(f"Оценка для {target.get_full_name()}: "))
                 grade = Grade(subject, mark, date.today(), prof)
 
-                has_gb = hasattr(target_student, 'grade_book')
-                if has_gb and hasattr(target_student.grade_book, 'record_grade'):
-                    target_student.grade_book.record_grade(grade)
-                    avg = target_student.grade_book.calculate_average_score()
+                if hasattr(target, 'grade_book'):
+                    target.grade_book.record_grade(grade)
+                    avg = target.grade_book.calculate_average_score()
                     print(f"Выставлено. Средний балл: {avg:.2f}")
                 else:
                     print("Оценка создана успешно.")
 
             elif choice == "4":
-                student_id = int(input("ID студента для отчисления: "))
-                students_list = getattr(group, 'students', [])
-
-                target_student = next(
-                    (s for s in students_list
-                     if getattr(s, 'person_id', 0) == student_id),
+                s_id = int(input("ID студента: "))
+                target = next(
+                    (s for s in group.students
+                     if getattr(s, 'person_id', 0) == s_id),
                     None
                 )
-
-                if not target_student:
+                if not target:
                     print("Студент не найден.")
                     continue
 
-                reason = input("Укажите причину отчисления: ")
-
+                reason = input("Причина отчисления: ")
                 if hasattr(dean, 'approve_expulsion'):
-                    order = dean.approve_expulsion(target_student, reason)
+                    order = dean.approve_expulsion(target, reason)
                     if hasattr(order, 'execute_order'):
                         order.execute_order()
-                    doc_num = getattr(order, 'doc_number', 'Б/Н')
-                    print(f"Приказ №{doc_num} подписан. Студент отчислен.")
+                    print("Приказ подписан. Студент отчислен.")
                 else:
-                    name = target_student.get_full_name()
-                    print(f"Отчислен студент {name}. Причина: {reason}")
+                    print(f"Студент {target.get_full_name()} отчислен.")
+
+            elif choice == "5":
+                print("\n--- Регистрация студента ---")
+                s_id = int(input("ID (число): "))
+                f_name = input("Имя: ")
+                l_name = input("Фамилия: ")
+
+                new_st = Student(s_id, f_name, l_name, date(2005, 1, 1))
+                new_st.grade_book = GradeBook(f"GB-{s_id}", new_st)
+                group.students.append(new_st)
+                print(f"Студент {f_name} {l_name} зачислен!")
+
+            elif choice == "6":
+                print("\n--- Найм преподавателя ---")
+                p_id = int(input("ID (число): "))
+                f_name = input("Имя: ")
+                l_name = input("Фамилия: ")
+                degree = input("Ученая степень: ")
+
+                new_prof = Professor(
+                    p_id, f_name, l_name, date(1980, 1, 1),
+                    "Доцент", 1500.0, degree
+                )
+                faculty.employees.append(new_prof)
+                print(f"Преподаватель {f_name} {l_name} нанят на факультет!")
+
+            elif choice == "7":
+                print("\n--- Назначение декана ---")
+                d_id = int(input("ID (число): "))
+                f_name = input("Имя: ")
+                l_name = input("Фамилия: ")
+
+                new_dean = Dean(
+                    d_id, f_name, l_name, date(1975, 1, 1),
+                    3000.0, "Декан", faculty
+                )
+                faculty.dean = new_dean
+                dean = new_dean
+                fac_name = getattr(faculty, 'name', 'Факультета')
+                print(f"{f_name} {l_name} назначен деканом {fac_name}!")
+
+            elif choice == "8":
+                print("\n--- Добавление предмета ---")
+                title = input("Название предмета: ")
+                hours = int(input("Количество часов (число): "))
+                exam_input = input("Есть ли экзамен (да/нет): ").strip().lower()
+                has_exam = exam_input == 'да'
+
+                subject = Subject(title, hours, has_exam)
+                print(f"Предмет '{title}' добавлен и установлен как активный!")
 
             elif choice == "0":
                 print("Выход из системы.")

@@ -6,6 +6,15 @@ from models import (
 from exceptions import DeaneryException
 
 
+# Безопасная функция для получения имени (чтобы ничего не падало)
+def get_name(obj):
+    name = getattr(obj, 'first_name', getattr(obj, 'name', ''))
+    surname = getattr(obj, 'last_name', getattr(obj, 'surname', ''))
+    if name or surname:
+        return f"{name} {surname}".strip()
+    return str(obj)
+
+
 def setup_test_data():
     faculty = Faculty("ФКС", "Корпус 4")
     dean = Dean(
@@ -59,7 +68,7 @@ def main():
                     print("- Список пуст")
                 for s in group.students:
                     st = getattr(s, 'status', 'Активен')
-                    print(f"- {s.get_full_name()} [{st}]")
+                    print(f"- {get_name(s)} [{st}]")
 
             elif choice == "2":
                 day = input("Введите день недели: ")
@@ -87,7 +96,7 @@ def main():
                     print("Студент не найден.")
                     continue
 
-                mark = int(input(f"Оценка для {target.get_full_name()}: "))
+                mark = int(input(f"Оценка для {get_name(target)}: "))
                 grade = Grade(subject, mark, date.today(), prof)
 
                 if hasattr(target, 'grade_book'):
@@ -115,7 +124,7 @@ def main():
                         order.execute_order()
                     print("Приказ подписан. Студент отчислен.")
                 else:
-                    print(f"Студент {target.get_full_name()} отчислен.")
+                    print(f"Студент {get_name(target)} отчислен.")
 
             elif choice == "5":
                 print("\n--- Регистрация студента ---")

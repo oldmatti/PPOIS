@@ -23,4 +23,4 @@ class Barcode:
 
     def format_label(self) -> str:
         """Return a printable label string with format and code."""
-        return f"[{self.barcode_format}] {self.code}"   
+        return f"[{self.barcode_format}] {self.code}"

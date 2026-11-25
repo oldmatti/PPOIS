@@ -90,3 +90,43 @@ jobs:
         with:
           name: deanery-app-mac
           path: lab2/dist/deanery-app-mac
+
+  build-and-test-lab3:
+    runs-on: macos-latest
+
+    defaults:
+      run:
+        working-directory: ./lab3
+
+    steps:
+      - name: 1. Скачивание кода репозитория
+        uses: actions/checkout@v4
+
+      - name: 2. Настройка окружения Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: 3. Установка необходимых библиотек
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pyinstaller pytest coverage
+
+      - name: 4. Проверка качества кода (Linter)
+        run: |
+          flake8 . --count --max-line-length=150 --extend-ignore=E402,F401,W292 --show-source --statistics
+
+      - name: 5. Запуск unit-тестов и проверка покрытия
+        run: |
+          python -m coverage run --source=models,exceptions,constants,main -m pytest tests/
+          python -m coverage report -m --fail-under=90
+
+      - name: 6. Сборка независимого исполняемого файла
+        run: |
+          pyinstaller --onefile main.py --name warehouse-app-mac
+
+      - name: 7. Сохранение артефакта сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: warehouse-app-mac
+          path: lab3/dist/warehouse-app-mac

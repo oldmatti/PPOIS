@@ -1,6 +1,5 @@
 """Physical address model for warehouse locations."""
 
-from constants import MIN_ORDER_QUANTITY
 from exceptions import InvalidDataError
 
 
@@ -33,6 +32,6 @@ class Address:
         return self.city.lower() == other.city.lower()
 
     def validate_postal_code(self) -> bool:
-        """Verify that the postal code contains at least one alphanumeric character."""
+        """Verify that the postal code contains only alphanumeric characters."""
         cleaned = self.postal_code.replace("-", "").replace(" ", "")
-        return len(cleaned) >= MIN_ORDER_QUANTITY and cleaned.isalnum()
+        return cleaned.isalnum()

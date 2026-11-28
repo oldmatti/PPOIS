@@ -8,6 +8,7 @@ Laboratory works for the PPOIS course.
 | --- | --- | --- | --- |
 | 1 | Python | Dictionary, Set | dictionary, set |
 | 2 | Python | OOP Domain Model (Deanery) | [lab2/README.md](lab2/README.md) |
+| 4 | Python | Generic Sorting & Undirected Graph | [lab4/README.md](lab4/README.md) |
 
 ## Requirements
 

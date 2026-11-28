@@ -90,3 +90,39 @@ jobs:
         with:
           name: deanery-app-mac
           path: lab2/dist/deanery-app-mac
+
+  build-and-test-lab4:
+    runs-on: macos-latest
+
+    steps:
+      - name: 1. Скачивание кода репозитория
+        uses: actions/checkout@v4
+
+      - name: 2. Настройка окружения Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: 3. Установка необходимых библиотек
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pyinstaller coverage
+
+      - name: 4. Проверка качества кода (Linter)
+        run: |
+          flake8 lab4 --count --max-line-length=150 --show-source --statistics
+
+      - name: 5. Запуск unit-тестов и проверка покрытия
+        run: |
+          python -m coverage run --source=lab4 --omit="lab4/tests/*,lab4/cli/*,lab4/main.py" -m unittest discover -s lab4/tests
+          python -m coverage report -m --fail-under=90
+
+      - name: 6. Сборка независимого исполняемого файла
+        run: |
+          pyinstaller --onefile --paths . lab4/main.py --name lab4-app-mac
+
+      - name: 7. Сохранение артефакта сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab4-app-mac
+          path: dist/lab4-app-mac
